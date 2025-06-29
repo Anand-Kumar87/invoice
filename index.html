@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice Generator</title>
+    <link rel="stylesheet" href="E:\invoice\css\normalize.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>InvoiceApp</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="#" data-page="dashboard" class="active"><i class="fas fa-home"></i> Dashboard</a></li>
+                    <li><a href="#" data-page="invoices"><i class="fas fa-file-invoice"></i> Invoices</a></li>
+                    <li><a href="#" data-page="clients"><i class="fas fa-users"></i> Clients</a></li>
+                    <li><a href="#" data-page="banks"><i class="fas fa-university"></i> Bank Accounts</a></li>
+                    <li><a href="#" data-page="settings"><i class="fas fa-cog"></i> Settings</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-title">
+                    <h1>Invoice Generator</h1>
+                </div>
+                <div class="user-menu">
+                    <span class="user-name">User</span>
+                    <button id="logout-btn" class="btn btn-small">Logout</button>
+                </div>
+            </header>
+
+            <!-- Content Area -->
+            <div class="content">
+                <!-- Dashboard Page -->
+                <section id="dashboard-page" class="page active">
+                    <div class="page-header">
+                        <h2>Dashboard</h2>
+                        <button id="create-invoice-btn" class="btn btn-primary">Create Invoice</button>
+                    </div>
+                    
+                    <div class="dashboard-stats">
+                        <div class="stat-card">
+                            <div class="stat-info">
+                                <h3>Total Invoices</h3>
+                                <p id="total-invoices">0</p>
+                            </div>
+                            <div class="stat-icon">
+                                <i class="fas fa-file-invoice"></i>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-info">
+                                <h3>Paid Invoices</h3>
+                                <p id="paid-invoices">0</p>
+                            </div>
+                            <div class="stat-icon paid">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-info">
+                                <h3>Pending Invoices</h3>
+                                <p id="pending-invoices">0</p>
+                            </div>
+                            <div class="stat-icon pending">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-info">
+                                <h3>Total Revenue</h3>
+                                <p id="total-revenue">$0.00</p>
+                            </div>
+                            <div class="stat-icon revenue">
+                                <i class="fas fa-dollar-sign"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="recent-invoices">
+                        <h3>Recent Invoices</h3>
+                        <div class="table-container">
+                            <table id="recent-invoices-table">
+                                <thead>
+                                    <tr>
+                                        <th>Invoice #</th>
+                                        <th>Client</th>
+                                        <th>Issue Date</th>
+                                        <th>Due Date</th>
+                                        <th>Amount</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="recent-invoices-body">
+                                    <!-- Invoices will be added here dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Invoices Page -->
+                <section id="invoices-page" class="page">
+                    <div class="page-header">
+                        <h2>Invoices</h2>
+                        <button id="create-invoice-btn-2" class="btn btn-primary">Create Invoice</button>
+                    </div>
+                    
+                    <div class="filters">
+                        <div class="filter-group">
+                            <label for="filter-client">Client:</label>
+                            <select id="filter-client">
+                                <option value="">All Clients</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="filter-status">Status:</label>
+                            <select id="filter-status">
+                                <option value="">All Statuses</option>
+                                <option value="Draft">Draft</option>
+                                <option value="Sent">Sent</option>
+                                <option value="Paid">Paid</option>
+                                <option value="Overdue">Overdue</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="filter-date-from">From:</label>
+                            <input type="date" id="filter-date-from">
+                        </div>
+                        <div class="filter-group">
+                            <label for="filter-date-to">To:</label>
+                            <input type="date" id="filter-date-to">
+                        </div>
+                        <button id="apply-filters" class="btn btn-small">Apply Filters</button>
+                        <button id="clear-filters" class="btn btn-small btn-outline">Clear</button>
+                    </div>
+                    
+                    <div class="table-container">
+                        <table id="invoices-table">
+                            <thead>
+                                <tr>
+                                    <th>Invoice #</th>
+                                    <th>Client</th>
+                                    <th>Issue Date</th>
+                                    <th>Due Date</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="invoices-body">
+                                <!-- Invoices will be added here dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Clients Page -->
+                <section id="clients-page" class="page">
+                    <div class="page-header">
+                        <h2>Clients</h2>
+                        <button id="add-client-btn" class="btn btn-primary">Add Client</button>
+                    </div>
+                    
+                    <div class="table-container">
+                        <table id="clients-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Address</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="clients-body">
+                                <!-- Clients will be added here dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Bank Accounts Page -->
+                <section id="banks-page" class="page">
+                    <div class="page-header">
+                        <h2>Bank Accounts</h2>
+                        <button id="add-bank-btn" class="btn btn-primary">Add Bank Account</button>
+                    </div>
+                    
+                    <div class="table-container">
+                        <table id="banks-table">
+                            <thead>
+                                <tr>
+                                    <th>Bank Name</th>
+                                    <th>Account Name</th>
+                                    <th>Account Number</th>
+                                    <th>Default</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="banks-body">
+                                <!-- Bank accounts will be added here dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Settings Page -->
+                <section id="settings-page" class="page">
+                    <div class="page-header">
+                        <h2>Settings</h2>
+                    </div>
+                    
+                    <div class="settings-container">
+                        <div class="settings-card">
+                            <h3>Company Logo</h3>
+                            <div class="logo-preview-container">
+                                <img id="logo-preview" src="C:\Users\dell\OneDrive\Pictures\of.png" alt="Company Logo" class="logo-preview">
+                            </div>
+                            <div class="logo-upload">
+                                <input type="file" id="logo-upload" accept="image/*" class="hidden">
+                                <button id="upload-logo-btn" class="btn btn-primary">Upload Logo</button>
+                                <button id="remove-logo-btn" class="btn btn-outline">Remove Logo</button>
+                            </div>
+                            <p class="settings-help">Recommended size: 300x100 pixels. Max file size: 1MB.</p>
+                        </div>
+                        
+                        <div class="settings-card">
+                            <h3>Company Information</h3>
+                            <div class="form-group">
+                                <label for="company-name">Company Name</label>
+                                <input type="text" id="company-name">
+                            </div>
+                            <div class="form-group">
+                                <label for="company-email">Email</label>
+                                <input type="email" id="company-email">
+                            </div>
+                            <div class="form-group">
+                                <label for="company-phone">Phone</label>
+                                <input type="tel" id="company-phone">
+                            </div>
+                            <div class="form-group">
+                                <label for="company-address">Address</label>
+                                <textarea id="company-address" rows="3"></textarea>
+                            </div>
+                            <button id="save-company-info" class="btn btn-primary" style="margin-top: 16px;">Save Information</button>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Footer -->
+            <footer class="footer">
+                <p>Website developed by Anand Kumar</p>
+            </footer>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <!-- Invoice Modal -->
+    <div id="invoice-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="invoice-modal-title">Create Invoice</h2>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="invoice-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="invoice-number">Invoice Number</label>
+                            <input type="text" id="invoice-number" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="invoice-client">Client</label>
+                            <select id="invoice-client" required>
+                                <option value="">Select Client</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="invoice-issue-date">Issue Date</label>
+                            <input type="date" id="invoice-issue-date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="invoice-due-date">Due Date</label>
+                            <input type="date" id="invoice-due-date" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="invoice-currency">Currency</label>
+                            <select id="invoice-currency" required>
+                                <option value="USD">USD - US Dollar</option>
+                                <option value="EUR">EUR - Euro</option>
+                                <option value="GBP">GBP - British Pound</option>
+                                <option value="INR">INR - Indian Rupee</option>
+                                <option value="JPY">JPY - Japanese Yen</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="invoice-bank">Bank Account</label>
+                            <select id="invoice-bank" required>
+                                <option value="">Select Bank Account</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <h3>Invoice Items</h3>
+                    <div class="invoice-items" id="invoice-items">
+                        <!-- Invoice items will be added here -->
+                        <div class="invoice-item">
+                            <div class="form-group">
+                                <label for="item-description-0">Description</label>
+                                <input type="text" id="item-description-0" class="item-description" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="item-quantity-0">Quantity</label>
+                                <input type="number" id="item-quantity-0" class="item-quantity" min="1" value="1" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="item-rate-0">Rate</label>
+                                <input type="number" id="item-rate-0" class="item-rate" min="0" step="0.01" value="0" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="item-amount-0">Amount</label>
+                                <input type="number" id="item-amount-0" class="item-amount" readonly>
+                            </div>
+                            <button type="button" class="btn btn-small btn-danger remove-item" disabled>Remove</button>
+                        </div>
+                    </div>
+                    <button type="button" id="add-item-btn" class="btn btn-small">Add Item</button>
+                    
+                    <div class="invoice-totals">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="invoice-subtotal">Subtotal</label>
+                                <input type="number" id="invoice-subtotal" readonly>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="invoice-tax-rate">Tax Rate (%)</label>
+                                <input type="number" id="invoice-tax-rate" min="0" step="0.1" value="0">
+                            </div>
+                            <div class="form-group">
+                                <label for="invoice-tax-amount">Tax Amount</label>
+                                                                <input type="number" id="invoice-tax-amount" readonly>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="invoice-discount-rate">Discount Rate (%)</label>
+                                <input type="number" id="invoice-discount-rate" min="0" step="0.1" value="0">
+                            </div>
+                            <div class="form-group">
+                                <label for="invoice-discount-amount">Discount Amount</label>
+                                <input type="number" id="invoice-discount-amount" readonly>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="invoice-total">Total</label>
+                                <input type="number" id="invoice-total" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="invoice-notes">Notes</label>
+                            <textarea id="invoice-notes" rows="3"></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="invoice-status">Status</label>
+                            <select id="invoice-status" required>
+                                <option value="Draft">Draft</option>
+                                <option value="Sent">Sent</option>
+                                <option value="Paid">Paid</option>
+                                <option value="Overdue">Overdue</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-outline close-modal-btn">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save Invoice</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Client Modal -->
+    <div id="client-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="client-modal-title">Add Client</h2>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="client-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="client-name">Name</label>
+                            <input type="text" id="client-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="client-email">Email</label>
+                            <input type="email" id="client-email" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="client-phone">Phone</label>
+                            <input type="tel" id="client-phone">
+                        </div>
+                    </div>
+                    
+                    <h3>Address</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="client-street">Street</label>
+                            <input type="text" id="client-street">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="client-city">City</label>
+                            <input type="text" id="client-city">
+                        </div>
+                        <div class="form-group">
+                            <label for="client-state">State</label>
+                            <input type="text" id="client-state">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="client-zip">ZIP Code</label>
+                            <input type="text" id="client-zip">
+                        </div>
+                        <div class="form-group">
+                            <label for="client-country">Country</label>
+                            <input type="text" id="client-country">
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-outline close-modal-btn">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save Client</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bank Account Modal -->
+    <div id="bank-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="bank-modal-title">Add Bank Account</h2>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="bank-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="bank-name">Bank Name</label>
+                            <input type="text" id="bank-name" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="account-name">Account Name</label>
+                            <input type="text" id="account-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="account-number">Account Number</label>
+                            <input type="text" id="account-number" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="swift-code">SWIFT Code</label>
+                            <input type="text" id="swift-code">
+                        </div>
+                        <div class="form-group">
+                            <label for="ifsc-code">IFSC Code</label>
+                            <input type="text" id="ifsc-code">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="branch-address">Branch Address</label>
+                            <textarea id="branch-address" rows="3"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group checkbox-group">
+                            <input type="checkbox" id="is-default">
+                            <label for="is-default">Set as default bank account</label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-outline close-modal-btn">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save Bank Account</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Invoice View Modal -->
+    <div id="invoice-view-modal" class="modal">
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <h2>Invoice Details</h2>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div id="invoice-preview">
+                    <div class="invoice-header">
+                        <div class="invoice-logo-title">
+                            <div class="invoice-logo">
+                                <img id="preview-logo" src="assets/default-logo.png" alt="Company Logo">
+                            </div>
+                            <div class="invoice-title">
+                                <h2>INVOICE</h2>
+                                <p id="preview-invoice-number"></p>
+                            </div>
+                        </div>
+                        <div class="invoice-dates">
+                            <p>Issue Date: <span id="preview-issue-date"></span></p>
+                            <p>Due Date: <span id="preview-due-date"></span></p>
+                            <p class="invoice-status" id="preview-status"></p>
+                        </div>
+                    </div>
+                    
+                    <div class="invoice-parties">
+                        <div class="invoice-from">
+                            <h3>Bill To:</h3>
+                            <p id="preview-client-name"></p>
+                            <p id="preview-client-email"></p>
+                            <p id="preview-client-phone"></p>
+                            <p id="preview-client-address"></p>
+                        </div>
+                        <div class="invoice-bank">
+                            <h3>Payment Details:</h3>
+                            <p>Bank: <span id="preview-bank-name"></span></p>
+                            <p>Account Name: <span id="preview-account-name"></span></p>
+                            <p>Account Number: <span id="preview-account-number"></span></p>
+                            <p id="preview-swift-container">SWIFT Code: <span id="preview-swift-code"></span></p>
+                            <p id="preview-ifsc-container">IFSC Code: <span id="preview-ifsc-code"></span></p>
+                        </div>
+                    </div>
+                    
+                    <div class="invoice-items-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Description</th>
+                                    <th>Quantity</th>
+                                    <th>Rate</th>
+                                    <th>Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody id="preview-items">
+                                <!-- Items will be added here dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="invoice-totals-preview">
+                        <div class="totals-row">
+                            <span>Subtotal:</span>
+                            <span id="preview-subtotal"></span>
+                        </div>
+                        <div class="totals-row" id="preview-tax-row">
+                            <span>Tax (<span id="preview-tax-rate"></span>%):</span>
+                            <span id="preview-tax-amount"></span>
+                        </div>
+                        <div class="totals-row" id="preview-discount-row">
+                            <span>Discount (<span id="preview-discount-rate"></span>%):</span>
+                            <span id="preview-discount-amount"></span>
+                        </div>
+                        <div class="totals-row total">
+                            <span>Total:</span>
+                            <span id="preview-total"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="invoice-notes" id="preview-notes-container">
+                        <h3>Notes:</h3>
+                        <p id="preview-notes"></p>
+                    </div>
+                </div>
+                
+                <div class="invoice-actions">
+                    <button id="download-pdf" class="btn btn-primary">Download PDF</button>
+                    <button id="edit-invoice" class="btn">Edit</button>
+                    <button id="delete-invoice" class="btn btn-danger">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="util.js"></script>
+    <script src="auth.js"></script>
+    <script src="E:\invoice\js\client.js"></script>
+    <script src="bank.js"></script>
+    <script src="settings.js"></script>
+    <script src="invoice.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
